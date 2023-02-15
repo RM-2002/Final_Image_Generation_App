@@ -12,12 +12,10 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-
 router.route("/").get((req, res) => {
   console.log("Received Request GET @ /api/v1/generate");
   res.status(200).json({ message: "Hello from DALL-E...." });
 });
-
 
 router.route("/").post(async (req, res) => {
   console.log("Received Request POST @ /api/v1/generate");
@@ -31,10 +29,12 @@ router.route("/").post(async (req, res) => {
       response_format: "b64_json",
     });
 
+    console.log(`Generated Image with prompt: ${prompt}`);
+
     const image = aiResponse.data.data[0].b64_json;
     res.status(200).json({ photo: image });
   } catch (error) {
-    console.error(error);
+    console.error("Error POST @ /api/v1/generate");
     res
       .status(500)
       .send(error?.response.data.error.message || "Something went wrong");
