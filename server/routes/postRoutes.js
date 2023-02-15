@@ -16,10 +16,15 @@ cloudinary.config({
 
 router.route("/").get(async (req, res) => {
   console.log("Received Request GET @ /api/v1/post");
+
   try {
     const posts = await Post.find({});
+    console.log(`Found ${posts.length} posts`);
+
     res.status(200).json({ success: true, data: posts });
   } catch (err) {
+    console.log("Error during GET @ /api/v1/post");
+
     res.status(500).json({
       success: false,
       message: "Fetching posts failed, please try again",
@@ -38,9 +43,12 @@ router.route("/").post(async (req, res) => {
       prompt,
       photo: photoUrl.url,
     });
+    console.log(`Created Post with name: ${name}`);
 
     res.status(200).json({ success: true, data: newPost });
   } catch (err) {
+    console.log("Error POST @ /api/v1/post");
+
     res.status(500).json({
       success: false,
       message: "Unable to create a post, please try again",
